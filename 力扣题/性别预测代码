@@ -1,0 +1,14 @@
+from sklearn import tree
+features=[[178,1],[155,0],[177,0],[165,0],[169,1],[160,0]]
+labels=['male','female','male','female','male','female']
+ 
+#创建决策树clf
+clf=tree.DecisionTreeClassifier()
+#将数据交给决策树进行训练
+clf=clf.fit(features,labels)
+#假设此时有一个158的没有胡子的人，机器会如何判断性别？
+result =clf.predict([[158,0]])
+print(result)
+#再次判断172有胡子的人
+result=clf.predict([[172,1]])
+

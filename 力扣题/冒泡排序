@@ -1,0 +1,210 @@
+public static void bubbleSort(int[] arr) {
+    for (int i = 0; i < arr.length - 1; i++) {
+        for (int j = 0; j < arr.length - 1 - i; j++) {
+            if (arr[j] > arr[j + 1]) {
+                // 如果左边的数大于右边的数，则交换，保证右边的数字最大
+                swap(arr, j, j + 1);
+            }
+        }
+    }
+}
+// 交换元素
+private static void swap(int[] arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+
+
+//给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+ class Solution {
+    public void moveZeroes(int[] nums) {
+        int n = nums.length, left = 0, right = 0;
+        while (right < n) {
+            if (nums[right] != 0) {
+                swap(nums, left, right);
+                left++;
+            }
+            right++;
+        }
+    }
+
+    public void swap(int[] nums, int left, int right) {
+        int temp = nums[left];
+        nums[left] = nums[right];
+        nums[right] = temp;
+    }
+}
+
+// 给你一个整数数组 nums，请你将该数组升序排列。
+class Solution {
+    public int[] sortArray(int[] nums) {
+        insertSort(nums);
+        return nums;
+    }
+
+    public static void insertSort(int[] arr) {
+        // 从第二个数开始，往前插入数字
+        for (int i = 1; i < arr.length; i++) {
+            int currentNumber = arr[i];
+            int j = i - 1;
+            // 寻找插入位置的过程中，不断地将比 currentNumber 大的数字向后挪
+            while (j >= 0 && currentNumber < arr[j]) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            // 两种情况会跳出循环：1. 遇到一个小于或等于 currentNumber 的数字，跳出循环，currentNumber 就坐到它后面。
+            // 2. 已经走到数列头部，仍然没有遇到小于或等于 currentNumber 的数字，也会跳出循环，此时 j 等于 -1，currentNumber 就坐到数列头部。
+            arr[j + 1] = currentNumber;
+        }
+    }
+}
+
+//链表
+public class SinglyListNode {
+    int val;
+    SinglyListNode next;
+    SinglyListNode(int x) { val = x; }
+}
+
+/** 
+设计链表的实现。您可以选择使用单链表或双链表。单链表中的节点应该具有两个属性：val 和 next。val 是当前节点的值，next 是指向下一个节点的指针/引用。如果要使用双向链表，则还需要一个属性 prev 以指示链表中的上一个节点。假设链表中的所有节点都是 0-index 的。
+
+在链表类中实现这些功能：
+
+get(index)：获取链表中第 index 个节点的值。如果索引无效，则返回-1。
+addAtHead(val)：在链表的第一个元素之前添加一个值为 val 的节点。插入后，新节点将成为链表的第一个节点。
+addAtTail(val)：将值为 val 的节点追加到链表的最后一个元素。
+addAtIndex(index,val)：在链表中的第 index 个节点之前添加值为 val  的节点。如果 index 等于链表的长度，则该节点将附加到链表的末尾。如果 index 大于链表长度，则不会插入节点。如果index小于0，则在头部插入节点。
+deleteAtIndex(index)：如果索引 index 有效，则删除链表中的第 index 个节点。
+*/
+class MyLinkedList {
+    class Node {
+        int val;
+        Node next;
+        Node(int val) {
+            this.val = val;
+        }
+    }
+    int size;
+    Node head;
+    /** Initialize your data structure here. */
+    public MyLinkedList() {
+        this.size = 0;
+        this.head = null;
+    }
+
+    /** Get the value of the index-th node in the linked list. If the index is invalid, return -1. */
+    public int get(int index) {
+        if (index < 0 || index >= size || head == null) {
+            return -1;
+        }
+        Node temp = this.head;
+        for (int i = 0; i < index; i++) {
+            temp = temp.next;
+        }
+        return temp.val;
+    }
+
+    /** Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list. */
+    public void addAtHead(int val) {
+        Node node = new Node(val);
+        node.next = this.head;
+        this.head = node;
+        size++;
+    }
+
+    /** Append a node of value val to the last element of the linked list. */
+    public void addAtTail(int val) {
+        if (size == 0) {
+            this.head = new Node(val);
+            head.next = null;
+            size++;
+        }else {
+            Node temp = this.head;
+            while (temp.next != null) {
+                temp = temp.next;
+            }
+            Node tail = new Node(val);
+            tail.next = null;
+            temp.next = tail;
+            size++;
+        }
+    }
+
+    /** Add a node of value val before the index-th node in the linked list. If index equals to the length of linked list, the node will be appended to the end of linked list. If index is greater than the length, the node will not be inserted. */
+    public void addAtIndex(int index, int val) {
+        if (index > this.size) {
+            return;
+        }
+        if (index <= 0) {
+            addAtHead(val);
+            return;
+        }
+        if (index == this.size) {
+            addAtTail(val);
+            return;
+        }
+
+        Node temp = this.head;
+        for (int i = 0; i < index - 1; i++) {
+            temp = temp.next;
+        }
+        Node insertNode = new Node(val);
+        insertNode.next = temp.next;
+        temp.next = insertNode;
+        size++;
+    }
+
+    /** Delete the index-th node in the linked list, if the index is valid. */
+    public void deleteAtIndex(int index) {
+        if (index < 0 || index >= this.size) {
+            return;
+        }
+        if (index == 0) {
+            if (size != 1) {
+                Node temp = this.head.next;
+                this.head =temp;
+                size--;
+                return;
+            }else {
+                this.head = null;
+                size--;
+                return;
+            }
+        }
+        Node temp = this.head;
+        for (int i = 0; i < index - 1; i++) {
+            temp = temp.next;
+        }
+        Node deleteNode = temp.next;
+        temp.next = deleteNode.next;
+        size--;
+    }
+}
+
+//给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
+
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        hashtable = [] #哈希表
+        for i , num in enumerate(nums):
+            if target - num in hashtable:
+                return [hashtable[target-num], i]
+        hashtable[num[i]] = i 
+        return []
+        
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

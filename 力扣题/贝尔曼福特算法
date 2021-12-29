@@ -1,0 +1,38 @@
+def bellman_ford( graph, source ):
+    
+    distance = {}
+    parent = {}
+    
+    for node in graph:
+        distance[node] = float( 'Inf' )
+        parent[node] = None
+    distance[source] = 0
+ 
+    for i in range( len( graph ) - 1 ):
+        for from_node in graph:
+            for to_node in graph[from_node]:
+                if distance[to_node] > graph[from_node][to_node] + distance[from_node]:
+                    distance[to_node] = graph[from_node][to_node] + distance[from_node]
+                    parent[to_node] = from_node
+ 
+    for from_node in graph:
+        for to_node in graph[from_node]:
+            if distance[to_node] > distance[from_node] + graph[from_node][to_node]:
+                return None, None
+ 
+    return distance, parent
+ 
+def test():
+    graph = {
+        'a': {'b': -1, 'c':  4},
+        'b': {'c':  3, 'd':  2, 'e':  2},
+        'c': {},
+        'd': {'b':  1, 'c':  5},
+        'e': {'d': -3}
+    }
+    distance, parent = bellman_ford( graph, 'a' )
+    print (distance)
+    print (parent)
+ 
+if __name__ == '__main__':
+    test()

@@ -1,0 +1,33 @@
+def max_value(capacity: int, weights: list[int], values: list[int], names: list[str]) -> int:
+    """
+    背包问题
+    :param capacity:    背包最大容量
+    :param weights:     每一件物品的重量
+    :param values:      每一件物品的价值
+    :param names:       每一件物品的名称
+    :return:            这个背包可以容纳物品的最大价值
+    """
+    # 存储最大价值
+    dp = [[0] * (capacity + 1) for _ in range(len(weights))]
+    # 存储选择的物品
+    path = [[''] * (capacity + 1) for _ in range(len(weights))]
+
+    # 由于python的-1会取最后一个元素，但其它语言需要注意(i - 1 < 0)的情况
+    for i in range(len(weights)):
+        for w in range(capacity + 1):
+            # 计算前i件在最大容量为w下时，可获得的最高价值
+            if weights[i] <= w and dp[i - 1][w] <= dp[i - 1][w - weights[i]] + values[i]:
+                dp[i][w] = dp[i - 1][w - weights[i]] + values[i]
+                path[i][w] = f'{path[i - 1][w - weights[i]]}{names[i]}'
+            else:
+                dp[i][w] = dp[i - 1][w]
+                path[i][w] = path[i - 1][w]
+
+    # 打印最大价值及其选择的物品
+    for i in range(len(dp)):
+        for j in range(1, len(dp[i])):
+            print(f'{dp[i][j]}({path[i][j]})'.rjust(12), end='')
+        print()
+
+    return dp[-1][-1]
+
